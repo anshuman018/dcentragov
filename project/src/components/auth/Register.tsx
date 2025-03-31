@@ -27,7 +27,7 @@ const Register = () => {
         throw new Error('कृपया मानव सत्यापन पूरा करें / Please complete human verification');
       }
 
-      const verificationResponse = await fetch('/api/verify-turnstile', {
+      const verificationResponse = await fetch('/.netlify/functions/verify-turnstile', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ token: turnstileToken })
