@@ -1,7 +1,10 @@
 import React from 'react';
 import { ArrowRight } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 const Hero = () => {
+  const navigate = useNavigate();
+
   return (
     <div className="relative bg-gradient-to-b from-red-700 to-orange-600 text-white py-20">
       {/* Decorative Pattern */}
@@ -21,7 +24,10 @@ const Hero = () => {
           </p>
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <button className="bg-white text-red-700 px-8 py-3 rounded-lg font-semibold hover:bg-red-50 transition-colors flex items-center justify-center">
+            <button 
+              onClick={() => navigate('/profile-setup')}
+              className="bg-white text-red-700 px-8 py-3 rounded-lg font-semibold hover:bg-red-50 transition-colors flex items-center justify-center"
+            >
               Get Started
               <ArrowRight className="ml-2" size={20} />
             </button>

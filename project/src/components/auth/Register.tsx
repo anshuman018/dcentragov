@@ -4,6 +4,7 @@ import { supabase } from '../../lib/supabase';
 import { BlockchainService } from '../../blockchain/services/BlockchainService';
 import TurnstileWidget from './Turnstile';
 import { AuthError, User } from '@supabase/supabase-js';
+import { ProfileService } from '../../services/ProfileService';
 
 const Register = () => {
   const [email, setEmail] = useState('');
@@ -27,7 +28,12 @@ const Register = () => {
         throw new Error('कृपया मानव सत्यापन पूरा करें / Please complete human verification');
       }
 
-      const verificationResponse = await fetch('/.netlify/functions/verify-turnstile', {
+      // Update the verification call
+      const verificationEndpoint = import.meta.env.DEV 
+        ? '/verify-turnstile'  // Changed from http://localhost:3001/verify-turnstile
+        : '/.netlify/functions/verify-turnstile';
+
+      const verificationResponse = await fetch(verificationEndpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ token: turnstileToken })
@@ -53,6 +59,20 @@ const Register = () => {
       });
 
       console.log('Your private key:', privateKey);
+
+      // Create MongoDB profile
+      const profileService = ProfileService.getInstance();
+      await profileService.createProfile(data.user.id, {
+        preferences: {
+          language: 'hi',
+          notifications: true,
+          accessibility: {
+            screenReader: false,
+            highContrast: false,
+            textSize: 'medium'
+          }
+        }
+      });
 
       navigate('/login');
     } catch (err) {

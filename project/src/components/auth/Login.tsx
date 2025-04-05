@@ -26,7 +26,11 @@ const Login = () => {
       }
 
       // Verify Turnstile token with your backend
-      const verificationResponse = await fetch('/api/verify-turnstile', {
+      const verificationEndpoint = import.meta.env.DEV 
+        ? '/verify-turnstile'  // Changed from http://localhost:3001/verify-turnstile
+        : '/.netlify/functions/verify-turnstile';
+
+      const verificationResponse = await fetch(verificationEndpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ token: turnstileToken })

@@ -7,6 +7,7 @@ import Login from './components/auth/Login';
 import Register from './components/auth/Register';
 import ServiceApplication from './components/services/ServiceApplication';
 import Dashboard from './components/dashboard/Dashboard';
+import ProfileSetup from './components/profile/ProfileSetup';
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/service/:serviceId" element={<ServiceApplication />} />
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/profile-setup" element={<ProfileSetup />} />
         </Routes>
       </div>
     </Router>

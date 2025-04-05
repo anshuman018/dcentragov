@@ -8,16 +8,24 @@ const handler: Handler = async (event) => {
     };
   }
 
-  const { token } = JSON.parse(event.body || '{}');
-
-  if (!token) {
-    return {
-      statusCode: 400,
-      body: JSON.stringify({ error: 'Token is required' }),
-    };
-  }
-
   try {
+    // For local development, bypass verification
+    if (process.env.NODE_ENV === 'development') {
+      return {
+        statusCode: 200,
+        body: JSON.stringify({ verified: true }),
+      };
+    }
+
+    const { token } = JSON.parse(event.body || '{}');
+
+    if (!token) {
+      return {
+        statusCode: 400,
+        body: JSON.stringify({ error: 'Token is required' }),
+      };
+    }
+
     const verificationResponse = await fetch(
       'https://challenges.cloudflare.com/turnstile/v0/siteverify',
       {
@@ -26,7 +34,7 @@ const handler: Handler = async (event) => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          secret: "0x4AAAAAABDNoyyWfmeR2XauPoMR5eG-NmU",
+          secret: process.env.CLOUDFLARE_TURNSTILE_SECRET_KEY,
           response: token,
         }),
       }

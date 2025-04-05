@@ -7,3 +7,7 @@
   from = "/api/*"
   to = "/.netlify/functions/:splat"
   status = 200
+
+[functions]
+  external_node_modules = ["mongodb"]
+  node_bundler = "esbuild"
